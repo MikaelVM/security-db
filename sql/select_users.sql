@@ -1,13 +1,16 @@
-SELECT usename AS role_name,
-  CASE
-     WHEN usesuper AND usecreatedb THEN
-	   CAST('superuser, create database' AS pg_catalog.text)
-     WHEN usesuper THEN
-	    CAST('superuser' AS pg_catalog.text)
-     WHEN usecreatedb THEN
-	    CAST('create database' AS pg_catalog.text)
-     ELSE
-	    CAST('' AS pg_catalog.text)
-  END role_attributes
-FROM pg_catalog.pg_user
-ORDER BY role_name desc;
+SELECT
+    u.usename AS role_name,
+    CASE
+        WHEN u.usesuper AND u.usecreatedb THEN 'superuser, create database'
+        WHEN u.usesuper THEN 'superuser'
+        WHEN u.usecreatedb THEN 'create database'
+        ELSE ''
+    END AS role_attributes,
+    COALESCE(string_agg(r.rolname, ', '), '') AS member_of
+FROM pg_catalog.pg_user u
+LEFT JOIN pg_auth_members m
+    ON m.member = u.usesysid
+LEFT JOIN pg_roles r
+    ON r.oid = m.roleid
+GROUP BY u.usename, u.usesuper, u.usecreatedb
+ORDER BY role_name DESC;

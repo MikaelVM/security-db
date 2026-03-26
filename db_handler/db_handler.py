@@ -7,19 +7,23 @@ from psycopg import Connection, connect
 from psycopg.sql import SQL
 
 class DatabaseHandler:
-    """A class for running SQL queries on a PostgreSQL database."""
+    """A class for running SQL queries on a PostgreSQL database.
 
-    def __init__(self, config_file_path: Path, *, verbose: bool = False) -> None:
+    Attributes:
+        verbose (bool): Whether to print the SQL queries being executed and connection status messages.
+        connection_string (str): The connection string used to connect to the PostgreSQL database.
+    """
+
+    def __init__(self, config_file_path: Path | ConfigParser, *, verbose: bool = False) -> None:
         self.verbose = verbose
         self.connection_string = self._get_connection_string_from_config(config_file_path)
 
-    def run_query(self, query: SQL | str, values: list[Any] = None) -> list[tuple] | None:
-        """Executes a SQL query on the PostgreSQL database.
+    def fetch_query_results(self, query: SQL | str, values: list[Any] = None) -> list[tuple]:
+        """Executes a SQL query and fetches the results from the PostgreSQL database.
 
         Args:
             query (SQL | str): The SQL query to be executed, either as a psycopg SQL object or a regular string.
             values (list[Any], optional): A list of values to be passed to the query. Defaults to None.
-
         """
         connection = self._get_postgres_connection()
         try:
@@ -31,14 +35,50 @@ class DatabaseHandler:
             print('-' * 50) if self.verbose else None
 
             with connection as conn:
+
                 if values:
-                    return conn.execute(query, values).results()
+                    result = conn.execute(query, values)
                 else:
-                    return conn.execute(query).results()
+                    result = conn.execute(query)
+
+                return result.fetchall()
 
         except Exception as e:
             print(f"Error executing query: {e}")
-            return None
+            return []
+
+
+    def run_query(self, query: SQL | str, values: list[Any] = None) -> bool:
+        """Executes a SQL query on the PostgreSQL database.
+
+        Args:
+            query (SQL | str): The SQL query to be executed, either as a psycopg SQL object or a regular string.
+            values (list[Any], optional): A list of values to be passed to the query. Defaults to None.
+
+        Returns:
+            bool: True if the query was executed successfully, False otherwise.
+        """
+        connection = self._get_postgres_connection()
+        try:
+            if isinstance(query, str):
+                query = SQL(query)
+
+            print(f"Running query: \n" + '-' * 50 +
+                  f"\n{query.as_string(connection)}\n") if self.verbose else None
+            print('-' * 50) if self.verbose else None
+
+            with connection as conn:
+                conn.autocommit = True # NOTE: DON'T DO THIS IN PRODUCTION CODE WITHOUT PROPER TRANSACTION MANAGEMENT
+                if values:
+                    conn.execute(query, values)
+                else:
+                    conn.execute(query)
+
+            return True
+
+        except Exception as e:
+            print(f"Error executing query: {e}")
+            return False
 
     def bulk_insert(self, query: SQL, values: list[list[Any]]) -> bool:
         raise NotImplementedError("Bulk insert method is not implemented yet.")
@@ -55,14 +95,17 @@ class DatabaseHandler:
             raise
 
     @staticmethod
-    def _get_connection_string_from_config(config_file_path: Path) -> str:
+    def _get_connection_string_from_config(config_file_path: Path | ConfigParser) -> str:
         """Reads database connection parameters from a configuration file and constructs a connection string.
 
         Args:
-            config_file_path (Path): The path to the configuration file containing the database connection parameters.
+            config_file_path (Path | ConfigParser): The path to the configuration file or a ConfigParser object.
         """
-        config = ConfigParser()
-        config.read(config_file_path)
+        if isinstance(config_file_path, ConfigParser):
+            config = config_file_path
+        else:
+            config = ConfigParser()
+            config.read(config_file_path)
 
         host = config['DBCONFIG']['host']
         port = config['DBCONFIG']['port']
