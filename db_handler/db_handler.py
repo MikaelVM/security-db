@@ -5,6 +5,7 @@ from typing import Any
 
 from psycopg import Connection, connect
 from psycopg.sql import SQL
+from psycopg import sql
 
 class DatabaseHandler:
     """A class for running SQL queries on a PostgreSQL database.
@@ -47,13 +48,13 @@ class DatabaseHandler:
             print(f"Error executing query: {e}")
             return []
 
-
-    def run_query(self, query: SQL | str, values: list[Any] = None) -> bool:
+    def run_query(self, query: SQL | str, values: tuple[Any] | dict[str, Any] = None, raise_error: bool = True) -> bool:
         """Executes a SQL query on the PostgreSQL database.
 
         Args:
             query (SQL | str): The SQL query to be executed, either as a psycopg SQL object or a regular string.
-            values (list[Any], optional): A list of values to be passed to the query. Defaults to None.
+            values (tuple[Any] | dict[str, Any], optional): A tuple or dictionary of values to be passed to the query. Defaults to None.
+            raise_error (bool, optional): Whether to raise an exception if the query execution fails. Defaults to False.
 
         Returns:
             bool: True if the query was executed successfully, False otherwise.
@@ -68,16 +69,17 @@ class DatabaseHandler:
             print('-' * 50) if self.verbose else None
 
             with connection as conn:
-                conn.autocommit = True # NOTE: DON'T DO THIS IN PRODUCTION CODE WITHOUT PROPER TRANSACTION MANAGEMENT
+                conn.autocommit = True # NOTE: DON'T DO THIS IN PRODUCTION CODE! NOT PROPER TRANSACTION MANAGEMENT
+                # I AM DOING THIS FOR SIMPLICITY IN THIS EXERCISE
                 if values:
                     conn.execute(query, values)
                 else:
                     conn.execute(query)
 
             return True
-
         except Exception as e:
-            print(f"Error executing query: {e}")
+            if raise_error:
+                raise
             return False
 
     def bulk_insert(self, query: SQL, values: list[list[Any]]) -> bool:
