@@ -20,7 +20,7 @@ class DBJob(Enum):
     """Enumeration for job roles, which are associated with one or more database roles."""
     DATA_INSPECTOR = [DBRole.PG_READ]
     DATA_ENGINEER = [DBRole.PUBLIC_READ, DBRole.PUBLIC_WRITE]
-    ANALYST = [DBRole.REPORTS_OWNER, DBRole.PUBLIC_READ]
+    ANALYST = [DBRole.REPORTS_OWNER]
     REPORT_VIEWER = [DBRole.REPORTS_READ]
 
 

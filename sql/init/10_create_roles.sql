@@ -15,10 +15,14 @@ CREATE ROLE public_read_order;
 GRANT USAGE ON SCHEMA public TO public_read_order;
 GRANT SELECT ON orders TO public_read_order;
 
-CREATE ROLE reports_owner;
+CREATE ROLE reports_owner WITH LOGIN PASSWORD 'secret';
+-- GRANT USAGE ON SCHEMA public TO reports_owner;
+-- GRANT SELECT ON ALL TABLES IN SCHEMA public TO reports_owner;
 CREATE SCHEMA reports AUTHORIZATION reports_owner;
 
 CREATE ROLE reports_read;
 GRANT USAGE ON SCHEMA reports TO reports_read;
 GRANT SELECT ON ALL TABLES IN SCHEMA reports TO reports_read;
-ALTER DEFAULT PRIVILEGES IN SCHEMA reports GRANT SELECT ON TABLES TO reports_read;
+ALTER DEFAULT PRIVILEGES IN SCHEMA reports FOR ROLE reports_owner GRANT SELECT ON TABLES TO reports_read;
+
+GRANT public_read TO reports_owner;
