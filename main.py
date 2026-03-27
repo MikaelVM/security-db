@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
     # Connect to the database as the analyst user
     console.log('Connecting to the database as the analyst user.', style='yellow')
-    db_config['DBCONFIG']['user'] = 'grahamstark'
+    db_config['DBCONFIG']['user'] = 'analyst'
     db_config['DBCONFIG']['password'] = 'secret'
     db_handler = DatabaseHandler(db_config)
     console.log('Connected to the database as the analyst user successfully.', style='green')

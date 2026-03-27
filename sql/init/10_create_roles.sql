@@ -14,6 +14,7 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public FOR ROLE public_owner GRANT INSERT, UP
 CREATE ROLE public_read_order;
 GRANT USAGE ON SCHEMA public TO public_read_order;
 GRANT SELECT ON orders TO public_read_order;
+GRANT SELECT ON orderdetails TO public_read_order;
 
 CREATE ROLE reports_owner;
 CREATE SCHEMA reports AUTHORIZATION reports_owner;
