@@ -1,3 +1,7 @@
+-- TODO: Refactor from public schama to northwind schema in the rest of the codebase for the following 2 SQL statements to work as intended.
+-- CREATE SCHEMA northwind;
+---SET search_path TO northwind;
+
 CREATE TABLE Categories (
     CategoryID INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     CategoryName VARCHAR(15) NOT NULL,

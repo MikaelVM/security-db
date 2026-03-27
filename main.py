@@ -1,9 +1,11 @@
+"""
+This script initializes the northwind_with_security database, creates users with different roles, and demonstrates
+how those users can interact with the database based on their permissions.
+"""
 from configparser import ConfigParser
+from pathlib import Path
 
 from db_handler import DatabaseHandler
-from pathlib import Path
-from configparser import ConfigParser
-from rich import print
 from rich.console import Console
 
 if __name__ == "__main__":
@@ -16,8 +18,8 @@ if __name__ == "__main__":
     # Drop and create the database to ensure a clean slate for the exercise.
     console.log('Dropping and creating database northwind_with_security...', style='yellow')
     db_handler.run_query(Path('sql/terminate_connections.sql').read_text())
-    db_handler.run_query("DROP DATABASE IF EXISTS northwind_with_security;")
-    db_handler.run_query("CREATE DATABASE northwind_with_security;")
+    db_handler.run_query("DROP DATABASE IF EXISTS northwind_with_security;", autocommit=True)
+    db_handler.run_query("CREATE DATABASE northwind_with_security;", autocommit=True)
     console.log('Database northwind_with_security created successfully.', style='green')
 
     # Connect to the newly created northwind_with_security database to initialize it.
@@ -84,10 +86,12 @@ if __name__ == "__main__":
     if db_handler.run_query("SELECT * FROM public.orders;", raise_error=False):
         console.log('Successfully queried the orders table as the reports reader user.', style='green')
     else:
-        console.log('Failed to query the orders table as the reports reader user due to lack of permissions.', style='red')
-        console.log('This is expected behavior as the reports reader user should not have access to the orders '
-                    'table, as it is in the public schema', style='purple')
-
-
-
-
+        console.log(
+            'Failed to query the orders table as the reports reader user due to lack of permissions.',
+            style='red'
+        )
+        console.log(
+            'This is expected behavior as the reports reader user should not have access to the orders '
+            'table, as it is in the public schema',
+            style='purple'
+        )

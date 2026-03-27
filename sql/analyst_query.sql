@@ -1,4 +1,3 @@
-
 CREATE TABLE reports.sales_summary_month AS
     SELECT
         count(*) as total_orders,
