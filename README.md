@@ -142,9 +142,11 @@ I wanted an easy way to compose SQL queries with variables, but since i needed t
 However, this approach was very cumbersome, lacked in depth documentation and examples from other users. As I ran out of time, O could not implment the feature.
 
 ## Acknowledgements
-### Specilisterne Academy
-This project was created during my time in the Specialisterne Academy three-month program (February 2 – April 26),
-as part of the Data Management track. I am grateful for the structured learning environment, feedback, and
-collaborative setting that made this project possible.
+### [Specilisterne Academy](https://dk.specialisterne.com/)
 
+This project was developed during my participation in the Specialisterne Academy’s three-month program (February 2 – 
+April 30), as part of the Data Management track.
+
+I am grateful for the structured learning environment, valuable feedback, and collaborative atmosphere that supported 
+the development of this project.
 
