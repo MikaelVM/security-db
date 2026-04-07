@@ -21,19 +21,25 @@ The project uses the **Northwind database** as a realistic dataset for demonstra
 
 ### Dependencies
 
-The project uses the following main dependencies:
+**Core**
 
-| Dependency                    | Purpose                                |
-|-------------------------------|----------------------------------------|
-| `psycopg[binary]`             | PostgreSQL database adapter for Python |
-| `flake8`                      | Code quality and style checking        |
-| `flake8-annotations`          | Enforces type annotations              |
-| `flake8-bugbear`              | Detects common bugs in Python          |
-| `flake8-docstrings`           | Enforces docstring conventions         |
-| `flake8-docstrings-complete`  | Validates complete docstrings          |
-| `flake8_import_order`         | Checks import order consistency        |
-| `pytest`                      | Testing framework                      |
-| `rich`                        | Rich text and pretty printing          |
+| Dependency        | Purpose                                |
+|------------------|----------------------------------------|
+| `psycopg[binary]`| PostgreSQL database adapter for Python |
+| `pytest`         | Testing framework                      |
+| `rich`           | Rich text and pretty printing          |
+
+**Linting & Code Quality (flake8 ecosystem)**
+
+| Dependency                   | Purpose                                |
+|-----------------------------|----------------------------------------|
+| `flake8`                    | Code quality and style checking        |
+| `flake8-annotations`        | Enforces type annotations              |
+| `flake8-bugbear`            | Detects common bugs in Python          |
+| `flake8-docstrings`         | Enforces docstring conventions         |
+| `flake8-docstrings-complete`| Validates complete docstrings          |
+| `flake8_import_order`       | Checks import order consistency        |
+
 
 ### Installation
 
