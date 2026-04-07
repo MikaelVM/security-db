@@ -1,5 +1,5 @@
 # security-db
-Project for the Data Management track in the Specialisterne Academy, focused on database security and management.
+Project for the Data Management track in the Specialisterne Academy, focused on PostgreSQL security(role management, and controlled data access).
 
 ## Description
 
@@ -12,34 +12,34 @@ This project is a collection of Python scripts and SQL templates that demonstrat
 
 The project uses the **Northwind database** as a realistic dataset for demonstrating security concepts in a business context.
 
+## Dependencies
+
+### Runtime
+
+| Dependency        | Purpose                                      |
+|-------------------|----------------------------------------------|
+| `psycopg[binary]` | PostgreSQL database adapter for Python       |
+| `rich`            | Console output formatting and status logging |
+
+### Development and Quality Tools
+
+| Dependency                   | Purpose                         |
+|------------------------------|---------------------------------|
+| `pytest`                     | Testing framework               |
+| `flake8`                     | Code quality and style checking |
+| `flake8-annotations`         | Type annotation checks          |
+| `flake8-bugbear`             | Common bug detection            |
+| `flake8-docstrings`          | Docstring validation            |
+| `flake8-docstrings-complete` | Complete docstring validation   |
+| `flake8_import_order`        | Import order consistency        |
+
+
 ## Getting Started
 
 ### Prerequisites
 - Python 3.13 or higher
 - PostgreSQL 18 or higher
 - pip (Python package manager)
-
-### Dependencies
-
-**Core**
-
-| Dependency        | Purpose                                |
-|------------------|----------------------------------------|
-| `psycopg[binary]`| PostgreSQL database adapter for Python |
-| `pytest`         | Testing framework                      |
-| `rich`           | Rich text and pretty printing          |
-
-**Linting & Code Quality (flake8 ecosystem)**
-
-| Dependency                   | Purpose                                |
-|-----------------------------|----------------------------------------|
-| `flake8`                    | Code quality and style checking        |
-| `flake8-annotations`        | Enforces type annotations              |
-| `flake8-bugbear`            | Detects common bugs in Python          |
-| `flake8-docstrings`         | Enforces docstring conventions         |
-| `flake8-docstrings-complete`| Validates complete docstrings          |
-| `flake8_import_order`       | Checks import order consistency        |
-
 
 ### Installation
 
@@ -101,7 +101,7 @@ python main.py
 
 ### Configuration
 
-The project requires a PostgreSQL database configuration file at `configs/local_db_config.ini`. 
+The project requires a PostgreSQL database configuration file at `configs/local_db_config.ini`.
 
 **Configuration options:**
 - `host` - PostgreSQL server hostname (default: localhost)
@@ -150,9 +150,9 @@ However, this approach was very cumbersome, lacked in depth documentation and ex
 ## Acknowledgements
 ### [Specilisterne Academy](https://dk.specialisterne.com/)
 
-This project was developed during my participation in the Specialisterne Academy’s three-month program (February 2 – 
+This project was developed during my participation in the Specialisterne Academy’s three-month program (February 2 –
 April 30), as part of the Data Management track.
 
-I am grateful for the structured learning environment, valuable feedback, and collaborative atmosphere that supported 
+I am grateful for the structured learning environment, valuable feedback, and collaborative atmosphere that supported
 the development of this project.
 
