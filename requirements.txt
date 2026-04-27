@@ -9,8 +9,5 @@ flake8_import_order==0.19.2
 # PostgreSQL database adapter for Python
 psycopg[binary]
 
-# Testing
-pytest
-
 # Log printing
 rich

@@ -1,4 +1,5 @@
-"""
+"""Security Exercise: Database Permissions and Roles.
+
 This script initializes the northwind_with_security database, creates users with different roles, and demonstrates
 how those users can interact with the database based on their permissions.
 """

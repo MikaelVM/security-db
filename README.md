@@ -1,20 +1,24 @@
-# security-db
-Project for the Data Management track in the Specialisterne Academy, focused on PostgreSQL security(role management, and controlled data access).
+# Security Database Project
+The following project is a demonstration in handling database security and management for a PostgreSQL database (role 
+management, and controlled data access).
 
-## Description
-
-This project is a collection of Python scripts and SQL templates that demonstrate comprehensive database security and management practices. It focuses on:
+The project was developed as part an assignment for the Data Management track at the Specialisterne Academy. 
+## Description (revise)
+This project is a collection of Python scripts and SQL templates that demonstrate comprehensive database security and 
+management practices. It focuses on:
 
 - **Role-Based Access Control (RBAC)** - Creating and managing database roles with granular permissions
 - **Database Initialization** - Automated setup of schemas, tables, and sample data
 - **PostgreSQL Security** - Best practices for managing database users and privileges
 - **Access Control Testing** - Verifying that roles can only access data they're authorized to view
 
-The project uses the **Northwind database** as a realistic dataset for demonstrating security concepts in a business context.
+The project uses the **Northwind database** as a realistic dataset for demonstrating security concepts in a business 
+context.
 
 ## Dependencies
+The project relies on the following Python libraries for runtime functionality and development tools.
 
-### Runtime
+### Main Dependencies
 
 | Dependency        | Purpose                                      |
 |-------------------|----------------------------------------------|
@@ -22,10 +26,10 @@ The project uses the **Northwind database** as a realistic dataset for demonstra
 | `rich`            | Console output formatting and status logging |
 
 ### Development and Quality Tools
+These dependencies are used for improve code quality, and maintaining coding standards during development.
 
 | Dependency                   | Purpose                         |
 |------------------------------|---------------------------------|
-| `pytest`                     | Testing framework               |
 | `flake8`                     | Code quality and style checking |
 | `flake8-annotations`         | Type annotation checks          |
 | `flake8-bugbear`             | Common bug detection            |
@@ -110,42 +114,52 @@ The project requires a PostgreSQL database configuration file at `configs/local_
 - `user` - Database user
 - `password` - Database password
 
-**⚠️ Security Note:** Never commit the config file with real credentials to version control. Use environment variables for production setups.
+**⚠️ Security Note:** Never commit the config file with real credentials to version control. Use environment variables 
+for production setups.
 
 ## Authors
-- Mikael Vind Mikkelsen
+- [Mikael Vind Mikkelsen](https://github.com/MikaelVM)
 
 ## License
-Not yet specified.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Project Challenges
-This section documents the key technical challenges encountered during development and the solutions discovered.
+## Project Challenges and Potential Future Work
+This section documents the key technical challenges encountered during development.
 
 ### Psycopg3 - String Composition for SQL Queries
+**Challenge:** Safely composing SQL queries that include dynamic identifiers (e.g., usernames) while preventing SQL 
+injection.
 
-**Challenge:** Safely composing SQL queries that include dynamic identifiers (e.g., usernames) while preventing SQL injection.
+During development, I wanted a flexible way to construct SQL queries with dynamic values. While standard parameter 
+substitution works well for values, it cannot be used for SQL identifiers such as table or column names. To address 
+this, Psycopg3 requires the use of the Identifier class from the psycopg.sql module when inserting identifiers into 
+queries.
 
-During development, I needed a flexible way to construct SQL queries with dynamic values. While standard parameter substitution works well for values, it cannot be used for SQL identifiers such as table or column names. To address this, Psycopg3 requires the use of the Identifier class from the psycopg.sql module when inserting identifiers into queries.
-
-Although this approach improves security by preventing SQL injection, it proved to be cumbersome in practice. The syntax is relatively verbose, and the available documentation and community examples are limited, making it difficult to implement efficiently.
+Although this approach improves security by preventing SQL injection, it proved to be cumbersome in practice. 
+The syntax is relatively verbose, and the available documentation and community examples are limited, making it 
+timeconsuming to implement correctly. 
 
 Due to time constraints and the added complexity, this feature was not implemented.
-### PostgreSQL Role Management
 
-**Challenge:** PostgreSQL's role and privilege system is complex and non-intuitive. The learning curve was steep, particularly with understanding:
+### PostgreSQL Role Management
+**Challenge:** PostgreSQL's role and privilege system is complex and non-intuitive. The learning curve was steep, 
+particularly with understanding:
 
 - How to create and manage roles with proper hierarchies
 - The difference between roles, users, and groups
 - How privileges propagate (or don't propagate) through role memberships
 
-**Key Insight - ALTER DEFAULT PRIVILEGES:**
-Roles and permissions assigned to a user do not automatically grant permissions to other users when they create new tables. This was a critical discovery that required explicit privilege assignment for future objects:
+Notably, roles assigned to a user does not automatically grant permissions to other user(s) if the role would do so by
+itself.
+For example, we have a role A that has permissions to create tables and then also assign reading privileges to user A 
+for each table that it creates. If role A is assigned to user B, then when user B creates a new table, user A will not
+automatically have permissions to read that table.
 
-Add a section under project challenges about string composition using the following as inspiration:
-Psycopg3:
-Proper string composition for SQL queries to avoid SQL injection:
-I wanted an easy way to compose SQL queries with variables, but since i needed to pass a variable into an identifier (username), I had to use the Identifier class from psycopg3.sql module, as psycopg3 does not allow parameter substitution for identifiers. This is a security measure to prevent SQL injection attacks.
-However, this approach was very cumbersome, lacked in depth documentation and examples from other users. As I ran out of time, O could not implment the feature.
+Instead, the user B must must also have assigned the paramaters to automatically assign read permissions, such that it
+also grants read permissions to user A when user B creates a new table.
+
+This adds a layer of complexity, as can be seen in [10_privileges.sql](sql/create_user/10_privileges.sql) and the
+create_user folder in general.
 
 ## Acknowledgements
 ### [Specilisterne Academy](https://dk.specialisterne.com/)
@@ -153,6 +167,6 @@ However, this approach was very cumbersome, lacked in depth documentation and ex
 This project was developed during my participation in the Specialisterne Academy’s three-month program (February 2 –
 April 30), as part of the Data Management track.
 
-I am grateful for the structured learning environment, valuable feedback, and collaborative atmosphere that supported
+I am grateful for their structured learning environment, valuable feedback, and collaborative atmosphere that supported
 the development of this project.
 
