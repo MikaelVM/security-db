@@ -1,172 +1,47 @@
 # Security Database Project
-The following project is a demonstration in handling database security and management for a PostgreSQL database (role 
-management, and controlled data access).
+This project is the result of completing a series of database security and management exercises provided by
+Specialisterne.
 
-The project was developed as part an assignment for the Data Management track at the Specialisterne Academy. 
-## Description (revise)
-This project is a collection of Python scripts and SQL templates that demonstrate comprehensive database security and 
-management practices. It focuses on:
+It demonstrates PostgreSQL role management, controlled data access, and database initialization using the Northwind 
+dataset.
 
-- **Role-Based Access Control (RBAC)** - Creating and managing database roles with granular permissions
-- **Database Initialization** - Automated setup of schemas, tables, and sample data
-- **PostgreSQL Security** - Best practices for managing database users and privileges
-- **Access Control Testing** - Verifying that roles can only access data they're authorized to view
+## Exercise Goal
+Implement a system that has the supports that following database users with the administrative privileges stated:
 
-The project uses the **Northwind database** as a realistic dataset for demonstrating security concepts in a business 
-context.
+1. `Admin` - Full administrative access (Superuser privileges)
+2. `Northwind Admin` - Full administrative access but limited to the Northwind database
+3. `Data Inspector` - Read-only access to all tables
+4. `Data Engineer` - Read and write access to all tables
+5. `Analyst` - All privileges for the `reports` schema only
+6. `Order Viewer` - Read-only access to a single table (`orders`) in the `reports` schema
+7. `Report Viewer` - Read-only access to tables in the `reports` schema only 
 
-## Dependencies
-The project relies on the following Python libraries for runtime functionality and development tools.
+I would like to note, that i am aware that making a user with superuser privileges is not a good practice in production 
+environments, but it was part of the exercise and thus included in the project.
 
-### Main Dependencies
+# See the Solution in Action
+1. Create a PostgreSQL database instance (e.g., using Docker or a local installation).
+2. Create a new config named `local_db_config.ini` in the `config` folder, following the structure of `db_config_example.ini` and provide the necessary connection details for your PostgreSQL instance.
+3. Install the required dependencies from the `requirements.txt` file.
+4. Run the `main.py` script to execute the database initialization and user setup process.
 
-| Dependency        | Purpose                                      |
-|-------------------|----------------------------------------------|
-| `psycopg[binary]` | PostgreSQL database adapter for Python       |
-| `rich`            | Console output formatting and status logging |
+## Acknowledgements
+[![img.png](docs/img.png)](https://dk.specialisterne.com/)
 
-### Development and Quality Tools
-These dependencies are used for improve code quality, and maintaining coding standards during development.
+This project was developed while I was participating in the Specialisterne Academy as part of the Data Management track 
+(February 2 to April 30, 2026).
 
-| Dependency                   | Purpose                         |
-|------------------------------|---------------------------------|
-| `flake8`                     | Code quality and style checking |
-| `flake8-annotations`         | Type annotation checks          |
-| `flake8-bugbear`             | Common bug detection            |
-| `flake8-docstrings`          | Docstring validation            |
-| `flake8-docstrings-complete` | Complete docstring validation   |
-| `flake8_import_order`        | Import order consistency        |
+Specialisterne is an organization that creates job opportunities for people with autism and similar challenges. Through 
+training, support, and guidance for employers on workplace inclusion, it helps individuals strengthen their skills and 
+find meaningful employment in the tech industry.
 
+I am grateful for the structured learning environment, valuable feedback, and collaborative atmosphere that helped make 
+this project possible.
 
-## Getting Started
-
-### Prerequisites
-- Python 3.13 or higher
-- PostgreSQL 18 or higher
-- pip (Python package manager)
-
-### Installation
-
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd security-db
-   ```
-
-2. **Create a virtual environment:**
-   ```bash
-   python -m venv venv
-   # On Windows:
-   venv\Scripts\activate
-   # On macOS/Linux:
-   source venv/bin/activate
-   ```
-
-3. **Install dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Configure the database connection:**
-   - Copy the example config file:
-     ```bash
-     cp configs/examples/db_config_example.ini configs/local_db_config.ini
-     ```
-   - Edit `configs/local_db_config.ini` with your PostgreSQL credentials:
-     ```ini
-     [DBCONFIG]
-     host=localhost
-     port=5432
-     dbname=postgres
-     user=postgres
-     password=your_password
-     ```
-
-### Running the Project
-
-The main entry point is `main.py`, which orchestrates database initialization and demonstrates role-based access control.
-
-**Basic usage:**
-```bash
-python main.py
-```
-
-**What the script does:**
-
-1. **Initializes the database** - Creates schemas, tables, and sample data from the Northwind dataset
-2. **Creates security roles** - Sets up five database roles with different permission levels:
-   - `northwind_admin` - Full administrative access
-   - `data_inspector` - Read-only access to all tables
-   - `data_engineer` - Ability to create and modify tables
-   - `analyst` - Read-only access to reports
-   - `report_viewer` - Limited read access to specific reports
-3. **Demonstrates access control** - Tests that each role can only access data they're permitted to see
-4. **Creates analysis tables** - Generates summary reports based on the sample data
-
-### Configuration
-
-The project requires a PostgreSQL database configuration file at `configs/local_db_config.ini`.
-
-**Configuration options:**
-- `host` - PostgreSQL server hostname (default: localhost)
-- `port` - PostgreSQL server port (default: 5432)
-- `dbname` - Database name (default: postgres)
-- `user` - Database user
-- `password` - Database password
-
-**⚠️ Security Note:** Never commit the config file with real credentials to version control. Use environment variables 
-for production setups.
-
-## Authors
-- [Mikael Vind Mikkelsen](https://github.com/MikaelVM)
+## See Also
+### [Project Challenges and Potential Future Work](docs/project_challenges.md)
+Document detailing some of the notable technical challenges encountered during development, along with potential 
+future improvements and extensions to the project.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Project Challenges and Potential Future Work
-This section documents the key technical challenges encountered during development.
-
-### Psycopg3 - String Composition for SQL Queries
-**Challenge:** Safely composing SQL queries that include dynamic identifiers (e.g., usernames) while preventing SQL 
-injection.
-
-During development, I wanted a flexible way to construct SQL queries with dynamic values. While standard parameter 
-substitution works well for values, it cannot be used for SQL identifiers such as table or column names. To address 
-this, Psycopg3 requires the use of the Identifier class from the psycopg.sql module when inserting identifiers into 
-queries.
-
-Although this approach improves security by preventing SQL injection, it proved to be cumbersome in practice. 
-The syntax is relatively verbose, and the available documentation and community examples are limited, making it 
-timeconsuming to implement correctly. 
-
-Due to time constraints and the added complexity, this feature was not implemented.
-
-### PostgreSQL Role Management
-**Challenge:** PostgreSQL's role and privilege system is complex and non-intuitive. The learning curve was steep, 
-particularly with understanding:
-
-- How to create and manage roles with proper hierarchies
-- The difference between roles, users, and groups
-- How privileges propagate (or don't propagate) through role memberships
-
-Notably, roles assigned to a user does not automatically grant permissions to other user(s) if the role would do so by
-itself.
-For example, we have a role A that has permissions to create tables and then also assign reading privileges to user A 
-for each table that it creates. If role A is assigned to user B, then when user B creates a new table, user A will not
-automatically have permissions to read that table.
-
-Instead, the user B must must also have assigned the paramaters to automatically assign read permissions, such that it
-also grants read permissions to user A when user B creates a new table.
-
-This adds a layer of complexity, as can be seen in [10_privileges.sql](sql/create_user/10_privileges.sql) and the
-create_user folder in general.
-
-## Acknowledgements
-### [Specilisterne Academy](https://dk.specialisterne.com/)
-
-This project was developed during my participation in the Specialisterne Academy’s three-month program (February 2 –
-April 30), as part of the Data Management track.
-
-I am grateful for their structured learning environment, valuable feedback, and collaborative atmosphere that supported
-the development of this project.
-
