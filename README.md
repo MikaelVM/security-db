@@ -60,4 +60,4 @@ Environment Database project, with a focus on a more complete ETL pipeline, Dock
 a CLI for running the pipeline.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](docs/LICENSE) file for details.
